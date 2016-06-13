@@ -1,0 +1,15 @@
+{
+  "require-dev": {
+    "phpunit/phpunit": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Punkstar\\DataMarshaller\\": "src/Punkstar/DataMarshaller"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Punkstar\\DataMarshallerTest\\": "tests/Punkstar/DataMarshallerTest"
+    }
+  }
+}
