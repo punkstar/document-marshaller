@@ -14,7 +14,7 @@ class Marshaller
         return sprintf(
             'NAME:%s;DATA:%s;',
             base64_encode($fragment->getName()),
-            base64_encode(serialize($fragment->getData()))
+            base64_encode($fragment->getData())
         );
     }
 
@@ -30,7 +30,7 @@ class Marshaller
         list(, $name, $data) = $matches;
 
         $name = base64_decode($name);
-        $value = unserialize(base64_decode($data));
+        $value = base64_decode($data);
 
         return new DocumentFragment($name, $value);
     }

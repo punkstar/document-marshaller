@@ -20,8 +20,8 @@ class MarshallerTest extends TestCase
         $marshalledFragment = $marshaller->marshall($fragment);
         $unmarshalledFragment = $marshaller->unmarshall($marshalledFragment);
 
-        $this->assertSame("test", $unmarshalledFragment->getName());
-        $this->assertSame($testValue, $unmarshalledFragment->getData());
+        $this->assertEquals("test", $unmarshalledFragment->getName());
+        $this->assertEquals($testValue, $unmarshalledFragment->getData());
     }
 
     /**
