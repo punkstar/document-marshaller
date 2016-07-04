@@ -25,6 +25,23 @@ class MarshallerTest extends TestCase
     }
 
     /**
+     * @test
+     * @dataProvider arrayProvider
+     */
+    public function testArrays($testValue)
+    {
+        $marshaller = new DocumentFragment\Marshaller();
+
+        $fragment = new DocumentFragment("test", $testValue);
+
+        $marshalledFragment = $marshaller->marshall($fragment);
+        $unmarshalledFragment = $marshaller->unmarshall($marshalledFragment);
+
+        $this->assertEquals("test", $unmarshalledFragment->getName());
+        $this->assertInternalType("array", $unmarshalledFragment->getData());
+        $this->assertEquals($testValue, $unmarshalledFragment->getData());
+    }
+
     /**
      * @test
      * @dataProvider boolProvider
@@ -41,6 +58,8 @@ class MarshallerTest extends TestCase
         $this->assertEquals("test", $unmarshalledFragment->getName());
         $this->assertEquals($testValue ? 1 : 0, $unmarshalledFragment->getData());
     }
+
+    /**
      * @return array
      */
     public function scalarProvider()
@@ -49,8 +68,6 @@ class MarshallerTest extends TestCase
             "string",
             123456,
             123.456,
-            true,
-            false,
             null,
             "true",
             "false",
@@ -75,6 +92,28 @@ class MarshallerTest extends TestCase
         $values = [
             true,
             false
+        ];
+
+        $formatted = [];
+
+        foreach ($values as $value) {
+            $formatted[] = [$value];
+        }
+
+        return $formatted;
+    }
+
+    /**
+     * @return array
+     */
+    public function arrayProvider()
+    {
+        $values = [
+            [1, 2, 3],
+            ["a", "b", "c"],
+            ["a", [1, 2, 3], "c"],
+            ["d" => "a", [1, 2, 3], "c"],
+            []
         ];
 
         $formatted = [];
