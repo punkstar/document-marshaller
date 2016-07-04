@@ -61,13 +61,9 @@ class Marshaller
     public function unmarshall(string $data) : Document {
         $document = json_decode($data, true);
 
-        $documentVersion = $document[self::KEY_VERSION];
-        $unmarshalledFragments = $document[self::KEY_FRAGMENTS];
+        $documentVersion = isset($document[self::KEY_VERSION]) ? intval($document[self::KEY_VERSION]) : self::VERSION_1;
+        $unmarshalledFragments = isset($document[self::KEY_FRAGMENTS]) ? $document[self::KEY_FRAGMENTS] : [];
         $fragments = [];
-
-        if (count($unmarshalledFragments) == 0) {
-            throw new \Exception("Expected at least one line in the document");
-        }
 
         if ($documentVersion != self::VERSION_1) {
             throw new \Exception(
@@ -79,21 +75,25 @@ class Marshaller
             );
         }
 
-        foreach ($unmarshalledFragments as $unmarshalledFragment) {
-            $fragments[] = $this->fragmentMarshaller->unmarshall($unmarshalledFragment);
+        if (count($unmarshalledFragments) > 0) {
+            foreach ($unmarshalledFragments as $unmarshalledFragment) {
+                $fragments[] = $this->fragmentMarshaller->unmarshall($unmarshalledFragment);
+            }
         }
 
-        $expectedChecksum = $this->calculateFragmentsChecksum($fragments);
-        $actualChecksum = $document[self::KEY_CHECKSUM];
+        if (isset($document[self::KEY_CHECKSUM])) {
+            $expectedChecksum = $this->calculateFragmentsChecksum($fragments);
+            $actualChecksum = $document[self::KEY_CHECKSUM];
 
-        if ($expectedChecksum != $actualChecksum) {
-            throw new ChecksumVerificationException(
-                sprintf(
-                    "The calculated checksum (%s) does not match the expected checksum (%s)",
-                    $expectedChecksum,
-                    $actualChecksum
-                )
-            );
+            if ($expectedChecksum != $actualChecksum) {
+                throw new ChecksumVerificationException(
+                    sprintf(
+                        "The calculated checksum (%s) does not match the expected checksum (%s)",
+                        $expectedChecksum,
+                        $actualChecksum
+                    )
+                );
+            }
         }
 
         return new Document($fragments);
