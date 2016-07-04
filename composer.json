@@ -1,6 +1,6 @@
 {
   "name": "punkstar/document-marshaller",
-  "description": "A library for encoding and decoded structured data in JSON",
+  "description": "A library for encoding and decoded structured data using JSON",
   "homepage": "https://github.com/punkstar/document-marshaller",
   "license": "MIT",
   "authors": [
