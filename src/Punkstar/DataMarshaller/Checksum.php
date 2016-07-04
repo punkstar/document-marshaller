@@ -8,7 +8,8 @@ class Checksum
      * @param string $subject
      * @return string
      */
-    public function calculate(string $subject) : string {
+    public function calculate(string $subject) : string
+    {
         return hash('sha256', $subject);
     }
 
@@ -17,7 +18,8 @@ class Checksum
      * @param string $subject
      * @return bool
      */
-    public function verify(string $expectedChecksum, string $subject) : bool {
+    public function verify(string $expectedChecksum, string $subject) : bool
+    {
         $actualChecksum = $this->calculate($subject);
 
         return $expectedChecksum == $actualChecksum;

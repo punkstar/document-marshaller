@@ -13,7 +13,8 @@ class Marshaller
      * @param DocumentFragment $fragment
      * @return array
      */
-    public function marshall(DocumentFragment $fragment) : array {
+    public function marshall(DocumentFragment $fragment) : array
+    {
         return [
             self::KEY_NAME => base64_encode($this->encode($fragment->getName())),
             self::KEY_DATA => base64_encode($this->encode($fragment->getData())),
@@ -24,7 +25,8 @@ class Marshaller
      * @param array $fragment
      * @return DocumentFragment
      */
-    public function unmarshall(array $fragment) : DocumentFragment {
+    public function unmarshall(array $fragment) : DocumentFragment
+    {
         $name = $this->decode(base64_decode($fragment[self::KEY_NAME]));
         $value = $this->decode(base64_decode($fragment[self::KEY_DATA]));
 
@@ -35,14 +37,15 @@ class Marshaller
      * @param $input
      * @return string
      */
-    protected function encode($input) {
+    protected function encode($input)
+    {
         if (is_bool($input) === true) {
             $input = intval($input);
         }
 
         if (is_scalar($input) || $input === null) {
             return $input;
-        } else if (is_array($input)) {
+        } elseif (is_array($input)) {
             return json_encode($input);
         }
     }
@@ -51,7 +54,8 @@ class Marshaller
      * @param $input
      * @return mixed
      */
-    protected function decode($input) {
+    protected function decode($input)
+    {
         if ($input == "true" || $input == "false") {
             return $input;
         }

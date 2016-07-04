@@ -20,7 +20,8 @@ class Document
     /**
      * @return DocumentFragment[]
      */
-    public function getFragments() : array {
+    public function getFragments() : array
+    {
         return $this->fragments;
     }
 }

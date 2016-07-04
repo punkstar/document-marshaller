@@ -37,7 +37,8 @@ class Marshaller
      * @param Document $document
      * @return string
      */
-    public function marshall(Document $document) : string {
+    public function marshall(Document $document) : string
+    {
         $fragments = $document->getFragments();
 
         $document = [
@@ -59,7 +60,8 @@ class Marshaller
      * @return Document
      * @throws \Exception
      */
-    public function unmarshall(string $data) : Document {
+    public function unmarshall(string $data) : Document
+    {
         $document = json_decode($data, true);
 
         $documentVersion = isset($document[self::KEY_VERSION]) ? intval($document[self::KEY_VERSION]) : self::VERSION_1;
@@ -104,7 +106,8 @@ class Marshaller
      * @param DocumentFragment[] $fragments
      * @return string
      */
-    protected function calculateFragmentsChecksum(array $fragments) : string {
+    protected function calculateFragmentsChecksum(array $fragments) : string
+    {
         $this->sortDocumentFragments($fragments);
 
         return $this->checksumCalculator->calculate(
@@ -115,7 +118,8 @@ class Marshaller
     /**
      * @param DocumentFragment[] $fragments
      */
-    protected function sortDocumentFragments(array &$fragments) {
+    protected function sortDocumentFragments(array &$fragments)
+    {
         usort($fragments, function ($a, $b) {
             return $a->getName() <=> $b->getName();
         });
