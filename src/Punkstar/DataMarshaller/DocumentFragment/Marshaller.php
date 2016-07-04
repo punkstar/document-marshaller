@@ -15,8 +15,8 @@ class Marshaller
      */
     public function marshall(DocumentFragment $fragment) : array {
         return [
-            self::KEY_NAME => base64_encode($fragment->getName()),
-            self::KEY_DATA => base64_encode($fragment->getData()),
+            self::KEY_NAME => base64_encode($this->encode($fragment->getName())),
+            self::KEY_DATA => base64_encode($this->encode($fragment->getData())),
         ];
     }
 
@@ -25,9 +25,43 @@ class Marshaller
      * @return DocumentFragment
      */
     public function unmarshall(array $fragment) : DocumentFragment {
-        $name = base64_decode($fragment[self::KEY_NAME]);
-        $value = base64_decode($fragment[self::KEY_DATA]);
+        $name = $this->decode(base64_decode($fragment[self::KEY_NAME]));
+        $value = $this->decode(base64_decode($fragment[self::KEY_DATA]));
 
         return new DocumentFragment($name, $value);
+    }
+
+    /**
+     * @param $input
+     * @return string
+     */
+    protected function encode($input) {
+        if (is_bool($input) === true) {
+            $input = intval($input);
+        }
+
+        if (is_scalar($input) || $input === null) {
+            return $input;
+        } else if (is_array($input)) {
+            return json_encode($input);
+        }
+    }
+
+    /**
+     * @param $input
+     * @return mixed
+     */
+    protected function decode($input) {
+        if ($input == "true" || $input == "false") {
+            return $input;
+        }
+
+        $json = json_decode($input, true);
+
+        if (json_last_error() == JSON_ERROR_NONE) {
+            return $json;
+        } else {
+            return $input;
+        }
     }
 }

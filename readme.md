@@ -9,7 +9,7 @@ allowing for the transportation and storage of related data in a single file.
 
 Notes on implementation:
 
-* Scalar data types are not preserved
+* Booleans will be converted into integers
 
 ## Installation
 
@@ -28,7 +28,7 @@ Create the marshallers and the checksum calculator:
 
     $checksumCalculator = new Checksum();
     $fragmentMarshaller = new DocumentFragment\Marshaller();
-    
+
     $marshaller = new DocumentMarshaller($fragmentMarshaller, $checksumCalculator);
 
 The marshall the document:
