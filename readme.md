@@ -11,6 +11,30 @@ Notes on implementation:
 
 * Scalar data types are not preserved
 
+## Installation
+
+    composer require punkstar/document-marshaller
+
+## Usage
+
+Create your document using `Document` and `DocumentFragment`, for example:
+
+    $document = new Document([
+        new DocumentFragment("Fragment One", "This is the content in this fragment"),
+        new DocumentFragment("Fragment Two", "This is the content in this fragment, the second")
+    ]);
+
+Create the marshallers and the checksum calculator:
+
+    $checksumCalculator = new Checksum();
+    $fragmentMarshaller = new DocumentFragment\Marshaller();
+    
+    $marshaller = new DocumentMarshaller($fragmentMarshaller, $checksumCalculator);
+
+The marshall the document:
+
+    $marshalledDocument = $marshaller->marshall($document);
+
 ## Document Format
 
 The document is encoded using JSON in the following structure:
