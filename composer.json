@@ -1,4 +1,15 @@
 {
+  "name": "punkstar/document-marshaller",
+  "description": "A library for encoding and decoded structured data in JSON",
+  "homepage": "https://github.com/punkstar/document-marshaller",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nick Jones",
+      "email": "nick@nicksays.co.uk",
+      "homepage": "https://www.nicksays.co.uk"
+    }
+  ],
   "require-dev": {
     "phpunit/phpunit": "^5.4",
     "satooshi/php-coveralls": "~2@dev"
