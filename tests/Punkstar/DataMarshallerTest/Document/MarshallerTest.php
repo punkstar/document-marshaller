@@ -76,6 +76,22 @@ class MarshallerTest extends TestCase
     }
 
     /**
+     * @test
+     * @expectedException \Punkstar\DataMarshaller\Exception\UnsupportedVersionException
+     */
+    public function testVersionTwoNotSupported()
+    {
+        // Data with invalid checksum
+        $marshalledDocument = '{"v":2,"f":[{"n":"Qm9keQ==","d":"V29ybGQ="},{"n":"SGVhZGVy","d":"SGVsbG8="}],"c":"d827049039f82a8b65a9b0f52e637cf3bc5d1e0dec7d6198edf901a5e3dcae7d"}';
+
+        $checksumCalculator = new Checksum();
+        $fragmentMarshaller = new DocumentFragment\Marshaller();
+        $documentMarshaller = new Marshaller($fragmentMarshaller, $checksumCalculator);
+
+        $documentMarshaller->unmarshall($marshalledDocument);
+    }
+
+    /**
      * @return array
      */
     public function poorDocumentFormatsProvider()

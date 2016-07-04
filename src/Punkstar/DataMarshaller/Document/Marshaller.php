@@ -7,6 +7,7 @@ use Punkstar\DataMarshaller\Document;
 use Punkstar\DataMarshaller\DocumentFragment;
 use Punkstar\DataMarshaller\DocumentFragment\Marshaller as DocumentFragmentMarshaller;
 use Punkstar\DataMarshaller\Exception\ChecksumVerificationException;
+use Punkstar\DataMarshaller\Exception\UnsupportedVersionException;
 
 class Marshaller
 {
@@ -66,7 +67,7 @@ class Marshaller
         $fragments = [];
 
         if ($documentVersion != self::VERSION_1) {
-            throw new \Exception(
+            throw new UnsupportedVersionException(
                 sprintf(
                     "Expected a version identifier of '%s', got '%s'",
                     self::VERSION_1,
