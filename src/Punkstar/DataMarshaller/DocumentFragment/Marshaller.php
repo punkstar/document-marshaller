@@ -6,31 +6,27 @@ use Punkstar\DataMarshaller\DocumentFragment;
 
 class Marshaller
 {
+    const KEY_NAME = 'n';
+    const KEY_DATA = 'd';
+
     /**
      * @param DocumentFragment $fragment
-     * @return string
+     * @return array
      */
-    public function marshall(DocumentFragment $fragment) : string {
-        return sprintf(
-            'NAME:%s;DATA:%s;',
-            base64_encode($fragment->getName()),
-            base64_encode($fragment->getData())
-        );
+    public function marshall(DocumentFragment $fragment) : array {
+        return [
+            self::KEY_NAME => base64_encode($fragment->getName()),
+            self::KEY_DATA => base64_encode($fragment->getData()),
+        ];
     }
 
     /**
-     * @param string $data
+     * @param array $fragment
      * @return DocumentFragment
      */
-    public function unmarshall(string $data) : DocumentFragment {
-        $matches = [];
-
-        preg_match('/NAME:(.*);DATA:(.*);/', $data, $matches);
-
-        list(, $name, $data) = $matches;
-
-        $name = base64_decode($name);
-        $value = base64_decode($data);
+    public function unmarshall(array $fragment) : DocumentFragment {
+        $name = base64_decode($fragment[self::KEY_NAME]);
+        $value = base64_decode($fragment[self::KEY_DATA]);
 
         return new DocumentFragment($name, $value);
     }

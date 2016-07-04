@@ -7,6 +7,11 @@ use Punkstar\DataMarshaller\DocumentFragment\Marshaller as DocumentFragmentMarsh
 
 class Marshaller
 {
+    const KEY_VERSION = 'v';
+    const KEY_FRAGMENTS = 'f';
+
+    const VERSION_1 = 1;
+
     /**
      * @var DocumentFragmentMarshaller
      */
@@ -23,37 +28,41 @@ class Marshaller
      */
     public function marshall(Document $document) : string {
         $fragments = $document->getFragments();
-        $marshalledFragments = [
-            "VERSION:1"
+
+        $document = [
+            self::KEY_VERSION => self::VERSION_1,
+            self::KEY_FRAGMENTS => []
         ];
 
         foreach ($fragments as $fragment) {
-            $marshalledFragments[] = $this->fragmentMarshaller->marshall($fragment);
+            $document[self::KEY_FRAGMENTS][] = $this->fragmentMarshaller->marshall($fragment);
         }
 
-        return join("\n", $marshalledFragments);
+        return json_encode($document);
     }
 
     /**
      * @param string $data
      * @return Document
+     * @throws \Exception
      */
     public function unmarshall(string $data) : Document {
-        $unmarshalledFragments = explode("\n", $data);
+        $document = json_decode($data, true);
+
+        $documentVersion = $document[self::KEY_VERSION];
+        $unmarshalledFragments = $document[self::KEY_FRAGMENTS];
         $fragments = [];
 
         if (count($unmarshalledFragments) == 0) {
             throw new \Exception("Expected at least one line in the document");
         }
 
-        $expectedVersion = $this->getVersionString("1");
-        $versionHeader = array_shift($unmarshalledFragments);
-
-        if ($versionHeader != $expectedVersion) {
+        if ($documentVersion != self::VERSION_1) {
             throw new \Exception(
                 sprintf(
-                    "Expected a version identifier of 'VERSION:1', got '%s'",
-                    $expectedVersion
+                    "Expected a version identifier of '%s', got '%s'",
+                    self::VERSION_1,
+                    $documentVersion
                 )
             );
         }
@@ -63,14 +72,5 @@ class Marshaller
         }
 
         return new Document($fragments);
-    }
-
-    /**
-     * @param string $version
-     * @return string
-     */
-    protected function getVersionString(string $version = "1") : string
-    {
-        return sprintf("VERSION:%s", $version);
     }
 }
